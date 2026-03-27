@@ -35,6 +35,7 @@ The skill guides an agent through:
 7. Validating that the managed browser launches successfully
 8. Distinguishing **browser launch success** from **browser tool exposure in the current chat session**
 9. Using `openclaw browser ... open <url>` as a practical fallback when the host browser works but the live agent session still lacks the `browser` tool
+10. Recommending `openclaw browser` as the primary direct-control surface for `wade-desktop`, with raw CDP and GUI automation treated as lower-priority fallbacks
 
 ## Intended environment
 

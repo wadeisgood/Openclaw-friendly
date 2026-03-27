@@ -151,6 +151,47 @@ At that point, the managed browser is ready and the machine-side setup is fixed.
 - you understand that existing-session attach is more fragile
 - the user is present to approve attach prompts if needed
 
+## Recommended control strategy for wade-desktop
+
+When the goal is to directly control the browser on `wade-desktop`, prefer this order:
+
+1. **Use `openclaw browser` as the primary control surface**
+2. Use raw CDP only as a lower-level fallback
+3. Treat Linux GUI automation on GNOME Wayland as a coarse fallback only
+
+### Why `openclaw browser` should be the default
+
+It provides a higher-level browser automation surface that already includes the pieces needed for reliable page interaction, such as:
+
+- page open/start/status
+- tab management
+- waits
+- snapshot refs / element targeting
+- form interaction
+- cookies / storage manipulation
+- resize / device / geo / locale / timezone settings
+- JS evaluation
+- screenshots and other captured artifacts
+
+This makes it a better day-to-day control layer than raw CDP and much better than fragile GUI click simulation.
+
+### Raw CDP guidance
+
+Raw CDP is feasible, but more fragile. If you use it directly, you must usually solve these yourself:
+
+- target/tab selection
+- wait strategy
+- retry after render or navigation changes
+- iframe handling
+- visibility / scroll before click/type
+- stable element addressing
+
+Therefore, do not make raw CDP the default if `openclaw browser` is already available.
+
+### GUI automation guidance
+
+On GNOME Wayland, GUI automation is often limited or awkward compared with classic X11 tooling. Treat it as a backup for coarse operations, not as the preferred route for reliable page interaction.
+
 ## Browser tool access vs browser launch
 
 Do not confuse these two problems:
