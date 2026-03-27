@@ -36,6 +36,7 @@ The skill guides an agent through:
 8. Distinguishing **browser launch success** from **browser tool exposure in the current chat session**
 9. Using `openclaw browser ... open <url>` as a practical fallback when the host browser works but the live agent session still lacks the `browser` tool
 10. Recommending `openclaw browser` as the primary direct-control surface for `wade-desktop`, with raw CDP and GUI automation treated as lower-priority fallbacks
+11. Providing a repeatable login-and-launch workflow for web AI tools on `wade-desktop`, including snapshot-driven interaction and credential-boundary rules
 
 ## Intended environment
 
