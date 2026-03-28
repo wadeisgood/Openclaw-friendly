@@ -1,74 +1,81 @@
-# ControlGUIsetting
+# OpenClaw-friendly Skills
 
-An OpenClaw skill for diagnosing and fixing Linux desktop GUI browser control, especially when the OpenClaw-managed browser cannot open a visible Chrome window due to missing desktop session environment variables.
+這個 repo 現在整理成一個**多 skill 技能倉庫**，不是只有單一 skill。
 
-## What this repo contains
+## 目前保留的 skill
 
 - `skills/control-gui-setting/`
-  - the skill source
-- `control-gui-setting.skill`
-  - packaged distributable skill bundle
+  - 修復 Linux 桌面環境下 OpenClaw managed browser 無法正常開啟 / 控制的問題
+- `skills/desktop-control-wayland/`
+  - 診斷 GNOME Wayland 桌面直接控制能力，例如 `ydotool`、portal、截圖權限
+- `skills/chatgpt-image-download/`
+  - 當 ChatGPT 已生成圖片，但一般 Download / Save 無法正常落地時，透過登入中的瀏覽器 session 可靠抓圖
 
-## What problem this skill solves
-
-This skill is for cases where:
-
-- `openclaw browser --browser-profile openclaw start` fails
-- the browser feature is enabled and Chrome is detected
-- logs show errors such as:
-  - `Missing X server or $DISPLAY`
-  - `The platform failed to initialize. Exiting.`
-  - `Could not find DevToolsActivePort`
-
-A common real-world cause is that the `openclaw-gateway.service` user service is running without the GUI desktop environment variables from the active GNOME/KDE login session.
-
-## What the skill does
-
-The skill guides an agent through:
-
-1. Confirming OpenClaw browser support is enabled
-2. Reading the true error from gateway logs
-3. Verifying that the machine really has a live desktop session
-4. Comparing shell environment vs `systemd --user` environment
-5. Importing `DISPLAY`, `WAYLAND_DISPLAY`, `XDG_SESSION_TYPE`, `XDG_RUNTIME_DIR`, and `DBUS_SESSION_BUS_ADDRESS` into `systemd --user`
-6. Restarting the OpenClaw gateway
-7. Validating that the managed browser launches successfully
-8. Distinguishing **browser launch success** from **browser tool exposure in the current chat session**
-9. Using `openclaw browser ... open <url>` as a practical fallback when the host browser works but the live agent session still lacks the `browser` tool
-10. Recommending `openclaw browser` as the primary direct-control surface for `wade-desktop`, with raw CDP and GUI automation treated as lower-priority fallbacks
-11. Providing a repeatable login-and-launch workflow for web AI tools on `wade-desktop`, including snapshot-driven interaction and credential-boundary rules
-
-## Intended environment
-
-- Linux desktop
-- GNOME or KDE session
-- Wayland or X11/Xwayland
-- OpenClaw browser feature enabled
-- Chrome/Chromium/Brave available
-
-## Skill name
-
-The skill folder uses the normalized skill-spec name:
-
-- `control-gui-setting`
-
-The repository title uses the requested presentation name:
-
-- `ControlGUIsetting`
-
-## Key files
-
-- `skills/control-gui-setting/SKILL.md`
-- `skills/control-gui-setting/references/linux-gui-browser-repair.md`
-- `skills/control-gui-setting/references/error-signatures.md`
-- `skills/control-gui-setting/references/session-cleanup.md`
-
-## Packaged skill
-
-The packaged skill file is included at the repo root:
+## 根目錄打包檔
 
 - `control-gui-setting.skill`
+- `desktop-control-wayland.skill`
+- `chatgpt-image-download.skill`
 
-## Usage note
+這些是對應 skill 的打包版本，可直接分發或安裝。
 
-This repository is focused on the skill itself, not a full OpenClaw installation guide. It assumes OpenClaw is already installed and the browser feature is available, but the GUI browser launch path needs repair.
+## 本次整理方向
+
+已將 repo 內容朝以下原則收斂：
+
+- **一個 skill 只負責一類問題**
+- **避免不同 skill 重複描述同一套流程**
+- **把 ChatGPT 圖片下載流程獨立成專門 skill**
+- **讓 README 與實際 repo 結構一致**
+
+## 技能邊界
+
+### `control-gui-setting`
+處理：
+- browser 啟動失敗
+- `$DISPLAY` / `WAYLAND_DISPLAY` / `DBUS_SESSION_BUS_ADDRESS` 傳遞問題
+- systemd --user 環境未繼承 GUI session
+- OpenClaw managed browser 啟動與 tool exposure 判斷
+
+不處理：
+- ChatGPT 圖片另存失敗
+- Wayland 全桌面注入與截圖權限調查
+
+### `desktop-control-wayland`
+處理：
+- Wayland 桌面控制能力檢查
+- `ydotoold` / `ydotool` 注入鏈
+- portal / screenshot / remote desktop capability
+
+不處理：
+- browser 啟動環境修復
+- ChatGPT 圖片下載流程
+
+### `chatgpt-image-download`
+處理：
+- ChatGPT 圖片已生成，但 Download / Save 無法落地
+- 直接抓圖網址遭遇 403
+- 使用 `openclaw browser waitfordownload` 從登入中的瀏覽器 session 可靠下載圖片
+
+不處理：
+- Linux GUI browser 啟動修復
+- 通用 Wayland 桌面控制
+
+## 結構
+
+```text
+skills/
+  chatgpt-image-download/
+  control-gui-setting/
+  desktop-control-wayland/
+```
+
+## 維護原則
+
+未來新增 skill 時，建議維持：
+
+- 名稱清楚
+- 邊界單一
+- SKILL.md 保持精簡
+- 細節放到 `references/`
+- 打包檔與來源內容同步更新
