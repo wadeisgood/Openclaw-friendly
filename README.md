@@ -1,7 +1,5 @@
 # OpenClaw-friendly Skills
 
-## 中文說明
-
 這個 repo 是一個**已整理、已納管的 OpenClaw skill 倉庫**，目前聚焦在三類明確問題：
 
 - Linux GUI browser 修復
@@ -70,8 +68,6 @@ skills/
 - 個人工作區資料不要直接混進 repo
 
 ---
-
-## English
 
 This repository is a **curated and version-controlled OpenClaw skill collection**. It currently focuses on three concrete problem areas:
 
