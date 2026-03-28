@@ -1,6 +1,10 @@
 # OpenClaw-friendly Skills
 
-這個 repo 是一個**已整理、已納管的 OpenClaw skill 倉庫**。
+這個 repo 是一個**已整理、已納管的 OpenClaw skill 倉庫**，目前聚焦在三類明確問題：
+
+- Linux GUI browser 修復
+- Wayland 桌面控制能力診斷
+- ChatGPT 圖片可靠下載
 
 它只保留目前確定有維護、已打包、已提交到 git 的技能內容；本地工作區中的個人檔案、記憶檔、暫存技能與實驗資料不納入版本控制。
 
@@ -19,40 +23,16 @@
 - `desktop-control-wayland.skill`
 - `chatgpt-image-download.skill`
 
-這些是對應 skill 的打包版本，可直接分發或安裝。
-
 ## 技能邊界
 
 ### `control-gui-setting`
-處理：
-- browser 啟動失敗
-- `$DISPLAY` / `WAYLAND_DISPLAY` / `DBUS_SESSION_BUS_ADDRESS` 傳遞問題
-- systemd --user 環境未繼承 GUI session
-- OpenClaw managed browser 啟動與 tool exposure 判斷
-
-不處理：
-- ChatGPT 圖片另存失敗
-- Wayland 全桌面注入與截圖權限調查
+處理：browser 啟動失敗、GUI session 環境傳遞、OpenClaw managed browser 啟動與 tool exposure 判斷。
 
 ### `desktop-control-wayland`
-處理：
-- Wayland 桌面控制能力檢查
-- `ydotoold` / `ydotool` 注入鏈
-- portal / screenshot / remote desktop capability
-
-不處理：
-- browser 啟動環境修復
-- ChatGPT 圖片下載流程
+處理：Wayland 桌面控制能力檢查、`ydotoold` / `ydotool` 注入鏈、portal / screenshot / remote desktop capability。
 
 ### `chatgpt-image-download`
-處理：
-- ChatGPT 圖片已生成，但 Download / Save 無法落地
-- 直接抓圖網址遭遇 403
-- 使用 `openclaw browser waitfordownload` 從登入中的瀏覽器 session 可靠下載圖片
-
-不處理：
-- Linux GUI browser 啟動修復
-- 通用 Wayland 桌面控制
+處理：ChatGPT 圖片另存失敗、直接抓圖 403、透過登入中的瀏覽器 session 可靠下載圖片。
 
 ## 未納管內容
 
@@ -67,7 +47,7 @@
 - `skills/clawteam/`
 - 個人腳本、虛擬環境、簡報檔
 
-這些內容不是這個 repo 的正式技能發布範圍，因此已透過 `.gitignore` 排除，避免把個人或實驗性資料混進 skill 倉庫。
+這些內容不是這個 repo 的正式技能發布範圍，因此已透過 `.gitignore` 排除。
 
 ## 結構
 
@@ -79,8 +59,6 @@ skills/
 ```
 
 ## 維護原則
-
-未來新增 skill 時，建議維持：
 
 - 名稱清楚
 - 邊界單一
